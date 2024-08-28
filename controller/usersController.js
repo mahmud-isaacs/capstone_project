@@ -37,7 +37,7 @@ const deleteUser = async(req,res)=>{
 const updateUser = async (req, res) => {
     try {
         let { firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile } = req.body;
-        let users = await getUsersDb(req.params.id);
+        let users = await getUserDb(req.params.id);
 
         firstName?firstName=firstName:firstName = users.firstName
         lastName?lastName=lastName:lastName = users.lastName
