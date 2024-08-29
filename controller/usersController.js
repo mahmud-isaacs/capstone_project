@@ -25,7 +25,7 @@ const addUser = async(req,res)=>{
             }
         });
     }catch(error){
-        res.status(500).send('An error occured while processing your request')
+        res.status(500).send('An error occurred while processing your request')
     }
 }
 
