@@ -75,6 +75,11 @@ const routes = [
     name: 'admin',
     component: () => import(/* webpackChunkName: "admin" */ '../views/AdminView.vue'),
     meta: { requiresAdmin: true } 
+  },
+  {
+    path: '/booking',
+    name: 'booking',
+    component: () => import(/* webpackChunkName: "bookings" */ '../views/BookingView.vue')
   }
 ]
 

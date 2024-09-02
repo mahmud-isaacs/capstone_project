@@ -2,8 +2,8 @@ import { createStore } from 'vuex';
 import axios from 'axios';
 import router from '@/router';
 import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/vue3-toastify.css';
-import { register } from 'register-service-worker';
+// import 'vue3-toastify/dist';
+// import { register } from 'register-service-worker';
 import { useCookies } from 'vue3-cookies';
 
 const apiURL = "https://capstone-project-0qjg.onrender.com/"
@@ -102,7 +102,7 @@ export default createStore({
         if  (msg) {
           context.dispatch("fetchUsers");
         } else {
-          toast.error(`${msg}`, {
+          toast.error(`${err}`, {
             autoClose: 2000,
             position: toast.POSITION.BOTTOM_CENTER,
         });
@@ -127,7 +127,7 @@ export default createStore({
           });
           router.push({name: "login"});
         } else {
-          toast.error(`${msg}`, {
+          toast.error(`${err}`, {
             autoClose: 2000,
             position: toast.POSITION.BOTTOM_CENTER,
           });  
