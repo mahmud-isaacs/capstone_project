@@ -1,5 +1,6 @@
 import { getUsersDb,getUserDb,addUserDb,deleteUserDb,updateUserDb, loginUserDb} from "../model/usersDB.js";
-import { hash } from "bcrypt";
+import { hash, compare } from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const fetchUsers = async(req,res)=>{
     res.json(await getUsersDb())
@@ -9,25 +10,34 @@ const fetchUser = async(req,res)=>{
     res.json(await getUserDb(req.params.id))
 }
 
-const addUser = async(req,res)=>{
-    try{
-        let {firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile} = req.body;
+const addUser = async (req, res) => {
+    let { firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile } = req.body;
+    
+    try {
+        const hashedPassword = await hash(userPass, 10); // Hash password
+        await addUserDb(firstName, lastName, userName, userAge, gender, userRole, userAdd, hashedPassword, userProfile);
 
-        hash(userPass, 10, async (err, hashedP)=>{
-            if (err){
-                return res.status(404).send('Error with password')
-            }
-            try {
-                await addUserDb(firstName,lastName,userName,userAge,gender,userRole,userAdd,hashedP,userProfile);
-                res.status(200).send('User was registered successfully');
-            }catch (dbError){
-                res.status(404).send('Error while registering user');
+        // Generate token
+        const user = await loginUserDb(userName);
+        const token = jwt.sign({ id: user.userID, userName: user.userName }, process.env.SECRET_KEY, {
+            expiresIn: "7d",
+        });
+
+        res.status(201).json({
+            msg: "Registration successful",
+            token,
+            user: {
+                id: user.userID,
+                userName: user.userName,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                userRole: user.userRole,
             }
         });
-    }catch(error){
-        res.status(500).send('An error occurred while processing your request')
+    } catch (error) {
+        res.status(500).json({ msg: "Registration failed", error: error.message });
     }
-}
+};
 
 const deleteUser = async(req,res)=>{
     await deleteUserDb(req.params.id)
@@ -69,8 +79,39 @@ const updateUser = async (req, res) => {
 };   
 
 
-const loginUser = async(req,res)=>{
-    res.json({message:"You have logged in successfully", token:req.body.token})
+const loginUser = async (req, res) => {
+    const { userName, userPass } = req.body;
+
+    try {
+        const user = await loginUserDb(userName);
+        if (!user) {
+            return res.status(401).json({ msg: "User not found" });
+        }
+
+        const isPasswordMatch = await compare(userPass, user.userPass);
+        if (!isPasswordMatch) {
+            return res.status(401).json({ msg: "Invalid password" });
+        }
+
+        // Generate token
+        const token = jwt.sign({ id: user.userID, userName: user.userName }, process.env.SECRET_KEY, {
+            expiresIn: "7d",
+        });
+
+        res.status(200).json({
+            msg: "Login successful",
+            token,
+            user: {
+                id: user.userID,
+                userName: user.userName,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                userRole: user.userRole,
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ msg: "Login failed", error: error.message });
+    }
 };
 
 export{fetchUsers,fetchUser,addUser,deleteUser,updateUser,loginUser}
