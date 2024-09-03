@@ -56,6 +56,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "users" */ '../views/UsersView.vue')
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "users" */ '../views/LoginView.vue')
+  },
+  {
     path: '/userDetail/:id',
     name: 'userDetail',
     component: () => import(/* webpackChunkName: "userDetail" */ '../views/UserDetailView.vue')
@@ -93,16 +98,16 @@ router.beforeEach((to, from, next) => {
   const { cookies } = useCookies()
   const token = cookies.get('authToken') 
   const isAuthenticated = !!token 
-  const userRole = store.state.user?.role 
+  const userRole = store.state.user?.userRole 
 
-  if (to.name === 'admin') {
+  if (to.name === 'Admin') {
     if (!isAuthenticated) {
       next({ name: 'login' }) 
       toast.error('Please login to access this page.', {
         autoClose: 3000,
         position: toast.POSITION.BOTTOM_CENTER,
       })
-    } else if (userRole !== 'Admin') {
+    } else if (userRole !== 'admin') {
       next({ name: 'home' }) 
       toast.error('Access for Admins only.', {
         autoClose: 3000,

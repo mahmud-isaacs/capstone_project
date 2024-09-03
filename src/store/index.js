@@ -19,13 +19,14 @@ export default createStore({
     order: null,
   },
   getters: {
+    user: (state) => state.user,
   },
   mutations: {
     setUsers(state, payload) {
       state.users = payload;
     },
-    setUser(state, payload) {
-      state.user = payload;
+    setUser(state, user) {
+      state.user = user;
     },
     setItems(state, payload) {
       state.items = payload;
@@ -114,37 +115,37 @@ export default createStore({
       });  
      }
     },  
-    async registerUser(context, payload) {
+    async registerUser({ commit }, payload) {
+      const { cookies } = useCookies();
       try {
-        const { msg, err, token } = await (
-          await axios.post(`${apiURL}users/register`, payload)
-        ).data
-        if (token) {
-          context.dispatch("fetchUsers");
-          toast.success(`${msg}`, {
+        const { data } = await axios.post(`${apiURL}users/register`, payload);
+        if (data.token) {
+          commit('setUser', data.user);
+          cookies.set('authToken', data.token, { expires: '7d' });
+          router.push({ name: 'home' });
+          toast.success('Registration successful!', {
             autoClose: 2000,
             position: toast.POSITION.BOTTOM_CENTER,
           });
-          router.push({name: "login"});
         } else {
-          toast.error(`${err}`, {
+          toast.error(`${data.msg}`, {
             autoClose: 2000,
             position: toast.POSITION.BOTTOM_CENTER,
-          });  
+          });
         }
       } catch (e) {
         toast.error(`${e.message}`, {
           autoClose: 2000,
           position: toast.POSITION.BOTTOM_CENTER,
-        });  
+        });
       }
     },
-    async login(context, payload) {
+    async login({ commit }, payload) {
       const { cookies } = useCookies();
       try {
         const { data } = await axios.post(`${apiURL}users/login`, payload);
         if (data.token) {
-          context.commit('setUser', data.user);
+          commit('setUser', data.user);
           cookies.set('authToken', data.token, { expires: '7d' });
           router.push({ name: 'home' });
           toast.success('Login successful!', {
@@ -164,11 +165,11 @@ export default createStore({
         });
       }
     },
-    async logout(context) {
+    async logout({ commit }) {
       const { cookies } = useCookies();
       try {
         cookies.remove('authToken');
-        context.commit('clearUser');
+        commit('clearUser');
         router.push({ name: 'login' });
         toast.success('Logout successful!', {
           autoClose: 2000,
@@ -201,45 +202,47 @@ export default createStore({
       });
     }
    }, 
-   async fetchItems({commit}) {
+   async fetchItems({ commit }) {
     try {
-      let { data, msg } =  await axios.get(`${apiURL}itemss`) 
-          
-          if (data.results) {
-            commit("setItems", data.results);
-          } else {
-            toast.error(`${msg}`, {
-              autoClose: 3000,
-            });
-          }
-        } catch (error) {
-          toast.error(`${error.message}`, {
-            autoClose: 3000,
-            position: toast.POSITION.BOTTOM_CENTER,
-          });
-        }
-     },
-     async fetchItem({commit}, id) {
+      const response = await axios.get(`${apiURL}items`);
+      console.log(response);  // Log the entire response
+      if (response.data) {
+        commit("setItems", response.data.results || response.data); // Adjust based on the structure
+      } else {
+        toast.error(`${response.msg || 'Failed to fetch items'}`, {
+          autoClose: 3000,
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      }
+    } catch (error) {
+      console.error(error);  // Log the error
+      toast.error(`${error.message}`, {
+        autoClose: 3000,
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+    }
+  },
+  
+  async fetchItem({ commit }, id) {
+    try {
+      const { data } = await axios.get(`${apiURL}items/${id}`);
+      if (data) {
 
-      try {
-        let { data, msg } = await axios.get(`${apiURL}items/${id}`)
-            if (data.result) {
-              commit("setItem", data.result);
-            console.log(data);
-            }
-            else {
-              toast.error(`${msg}`, {
-                autoClose: 3000,
-                position: toast.POSITION.BOTTOM_CENTER,
-              });
-            }
-          } catch (error) {
-            toast.error(`${error.message}`, {
-              autoClose: 3000,
-              position: toast.POSITION.BOTTOM_CENTER,
-            });
-          }
-        },
+        commit('setItem', data);
+        console.log(data);
+      } else {
+        toast.error('Failed to fetch item', {
+          autoClose: 3000,
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`, {
+        autoClose: 3000,
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+    }
+  },
         async addItem(context, payload) {
           try {
             const { msg } = await (
