@@ -15,19 +15,21 @@
         <option disabled value="">Select a time slot</option>
         <option v-for="timeSlot in timeSlots" :key="timeSlot">{{ timeSlot }}</option>
       </select>
-
-      <button @click="addItem">Add order</button>
+      {{ selectedItem }}
+      {{ selectedTimeSlot }}
+      {{ selectedDate }}
+      <!-- <button @click="addItem">Add order</button> -->
 
       <div v-if="selectedItems.length > 0">
         <h3>Your Order:</h3>
         <ul>
-          <li v-for="(item, index) in selectedItems" :key="index">
+          <!-- <li v-for="(item, index) in selectedItems" :key="index">
             {{ item.itemName }} - {{ item.timeSlot }}
-          </li>
+          </li> -->
         </ul>
       </div>
 
-      <button @click="bookSlot">Confirm</button>
+      <button @click="addItem()">Confirm</button>
     </div>
   </div>
 </template>
@@ -43,7 +45,7 @@ export default {
       selectedItem: null,
       selectedTimeSlot: "",
       timeSlots: ["14:00 PM - 15:00 PM", "15:00 PM - 16:00 PM", "19:00 PM - 20:00 PM", "20:00 PM - 21:00 PM", "21:00 PM - 22:00 PM"],
-      selectedItems: [] 
+      selectedItems: []
     };
   },
   computed: {
@@ -60,26 +62,27 @@ export default {
       }
     },
     addItem() {
-      if (this.selectedItem && this.selectedTimeSlot) {
-        this.selectedItems.push({
-          itemName: this.selectedItem.itemName,
-          timeSlot: this.selectedTimeSlot
-        });
-        this.resetSelection();
-      } else {
-        alert("Please select an item and a time slot");
-      }
+      this.$store.dispatch('addOrder',{timeSlot:this.selectedTimeSlot,itemID:this.selectedItem.itemID,bookingDate:this.selectedDate})
+      // if (this.selectedItem && this.selectedTimeSlot) {
+      //   this.selectedItems.push({
+      //     itemName: this.selectedItem.itemName,
+      //     timeSlot: this.selectedTimeSlot
+      //   });
+      //   this.resetSelection();
+      // } else {
+      //   alert("Please select an item and a time slot");
+      // }
     },
-    bookSlot() {
-      if (this.selectedItems.length > 0) {
-        alert(`Booking confirmed for the following items on ${this.selectedDate}:\n` +
-              this.selectedItems.map(item => `${item.itemName} at ${item.timeSlot}`).join('\n'));
-        this.selectedItems = []; 
-        this.resetSelection(); 
-      } else {
-        alert("Please add at least one item");
-      }
-    },
+    // bookSlot() {
+    //   if (this.selectedItems.length > 0) {
+    //     alert(`Booking confirmed for the following items on ${this.selectedDate}:\n` +
+    //           this.selectedItems.map(item => `${item.itemName} at ${item.timeSlot}`).join('\n'));
+    //     this.selectedItems = []; 
+    //     this.resetSelection(); 
+    //   } else {
+    //     alert("Please add at least one item");
+    //   }
+    // },
     resetSelection() {
       this.selectedItem = null;
       this.selectedTimeSlot = "";

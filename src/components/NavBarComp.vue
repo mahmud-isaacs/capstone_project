@@ -30,8 +30,17 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/contact" active-class="active-link">Contact Us</router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/login" active-class="active-link">Log in</router-link>
+        </ul>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item" v-if="user">
+          <router-link :to="{ name: 'userDetail', params: { id: user.id } }">
+          <img :src="user.userProfile || 'https://codjoelmayer.github.io/projectImages/images/profile-Image.png'" alt="Profile" class="profile-icon">
+            </router-link>    
+      </li>
+  <li class="nav-item" v-else>
+    <router-link :to="{ name: 'login' }" class="nav-link">
+      Login
+    </router-link>
           </li>
         </ul>
       </div>
@@ -39,8 +48,15 @@
   </nav>
 </template>
 
+
 <script>
-   
+import { mapGetters } from 'vuex';
+
+export default {
+  computed: {
+    ...mapGetters(['user']), // Access user from Vuex store
+  },
+};
 </script>
 
 <style scoped>
@@ -68,5 +84,11 @@
 
 .imageLogo {
   width: 40px;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 </style>
