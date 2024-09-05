@@ -11,13 +11,13 @@ const fetchUser = async(req,res)=>{
 }
 
 const addUser = async (req, res) => {
+    console.log("Received registration data:", req.body);
     let { firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile } = req.body;
     
     try {
-        const hashedPassword = await hash(userPass, 10); // Hash password
+        const hashedPassword = await hash(userPass, 10); 
         await addUserDb(firstName, lastName, userName, userAge, gender, userRole, userAdd, hashedPassword, userProfile);
 
-        // Generate token
         const user = await loginUserDb(userName);
         const token = jwt.sign({ id: user.userID, userName: user.userName }, process.env.SECRET_KEY, {
             expiresIn: "7d",
@@ -35,6 +35,7 @@ const addUser = async (req, res) => {
             }
         });
     } catch (error) {
+        console.error("Error during registration:", error);
         res.status(500).json({ msg: "Registration failed", error: error.message });
     }
 };
