@@ -11,17 +11,24 @@ const fetchUser = async(req,res)=>{
 }
 
 const addUser = async (req, res) => {
-    console.log("Received registration data:", req.body);
-    let { firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile } = req.body;
+    console.log("Received registration request with data:", req.body);
     
+    let { firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile } = req.body;
+
     try {
-        const hashedPassword = await hash(userPass, 10); 
+        const hashedPassword = await hash(userPass, 10); // Hash password
+        console.log("Password hashed successfully.");
+
         await addUserDb(firstName, lastName, userName, userAge, gender, userRole, userAdd, hashedPassword, userProfile);
+        console.log("User inserted into database.");
 
         const user = await loginUserDb(userName);
+        console.log("User retrieved from database:", user);
+
         const token = jwt.sign({ id: user.userID, userName: user.userName }, process.env.SECRET_KEY, {
             expiresIn: "7d",
         });
+        console.log("Token generated successfully.");
 
         res.status(201).json({
             msg: "Registration successful",
@@ -35,10 +42,11 @@ const addUser = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error("Error during registration:", error);
+        console.error("Registration error:", error);
         res.status(500).json({ msg: "Registration failed", error: error.message });
     }
 };
+
 
 const deleteUser = async(req,res)=>{
     await deleteUserDb(req.params.id)

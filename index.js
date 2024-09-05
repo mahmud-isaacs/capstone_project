@@ -9,6 +9,7 @@ app.use(express.static('public'))
 app.use(express.json())
 app.use(cors({
     origin: '*',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials:true
 }))
 app.use((req,res, next)=>{
