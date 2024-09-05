@@ -34,7 +34,7 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item" v-if="user">
           <router-link :to="{ name: 'userDetail', params: { id: user.id } }">
-          <img :src="user.userProfile || 'https://codjoelmayer.github.io/projectImages/images/profile-Image.png'" alt="Profile" class="profile-icon">
+          <img :src="user.userProfile" alt="Profile" class="profile-icon">
             </router-link>    
       </li>
   <li class="nav-item" v-else>

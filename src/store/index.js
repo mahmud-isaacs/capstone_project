@@ -60,8 +60,8 @@ export default createStore({
     async fetchUsers({ commit }) {
       try {
         let { data, msg } = await axios.get(`${apiURL}users`);
-        if (data.result) {
-          commit('setUsers', data.result);
+        if (data) {
+          commit('setUsers', data.result || data);
           console.log(data);
         } else {
           toast.error(`${msg}`, {
@@ -80,8 +80,8 @@ export default createStore({
     async fetchUser({ commit }, id) {
       try {
         const { data, msg } = await axios.get(`${apiURL}users/${id}`);
-        if (data.result) {
-          commit('setUser', data.result);
+        if (data) {
+          commit('setUser', data.result || data);
         } else {
           toast.error(`${msg}`, {
             autoClose: 2000,
@@ -117,34 +117,34 @@ export default createStore({
       }
     },
     
-    async registerUser({ commit }, userData) {
-      const { cookies } = useCookies();
+    async registerUser({ dispatch }, payload) {
       try {
-        const response = await axios.post(`${apiURL}users/register`, userData);
-        const { token, user } = response.data;
-
-        if (token && user) {
-          commit('setUser', user);
-          cookies.set('authToken', token, { expires: '7d' });
-          router.push({ name: 'home' });
-          toast.success('Registration successful!', {
+        const { data } = await axios.post(`${apiURL}users/register`, payload);
+        const { msg, err, token } = data;
+        
+        if (token) {
+          dispatch("fetchUsers");
+          toast.success(`${msg}`, {
             autoClose: 2000,
             position: toast.POSITION.BOTTOM_CENTER,
           });
+          this.$router.push({ name: "login" });
         } else {
-          toast.error('Registration failed!', {
+          toast.error(`${err}`, {
             autoClose: 2000,
             position: toast.POSITION.BOTTOM_CENTER,
           });
         }
-      } catch (error) {
-        toast.error('Registration failed! Please try again.', {
+      } catch (e) {
+        toast.error(`${e.message}`, {
           autoClose: 2000,
           position: toast.POSITION.BOTTOM_CENTER,
         });
-        console.error('Registration error:', error);
       }
     },
+  
+  
+  
     
     async login({ commit }, payload) {
       const { cookies } = useCookies();
