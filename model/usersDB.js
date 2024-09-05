@@ -25,12 +25,17 @@ const loginUserDb = async(userName) =>{
     return data
 }
 
-const addUserDb = async(firstName,lastName,userName,userAge,gender,userRole,userAdd,userPass,userProfile)=>{
-    await pool.query(`
-        INSERT INTO users (firstName,lastName,userName,userAge,gender,userRole,userAdd,userPass,userProfile)
-        VALUES (?,?,?,?,?,?,?,?,?)
-        `, [firstName,lastName,userName,userAge,gender,userRole,userAdd,userPass,userProfile])
-}
+const addUserDb = async(firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile) => {
+    try {
+        await pool.query(`
+            INSERT INTO users (firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile]);
+    } catch (error) {
+        console.error("Database insertion failed:", error.message);
+        throw error; 
+    }
+};
 
 const deleteUserDb = async(id)=>{
     await pool.query(`DELETE FROM users WHERE userID = ?`, [id])
