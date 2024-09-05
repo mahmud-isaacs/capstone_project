@@ -90,7 +90,7 @@
         if (confirm('Are you sure you want to delete this user?')) {
           this.$store.dispatch('deleteUser', userID)
             .then(() => {
-              this.fetchUsers();  // Refresh the user list after deletion
+              this.fetchUsers();  
             })
             .catch(err => {
               console.error('Failed to delete user:', err);

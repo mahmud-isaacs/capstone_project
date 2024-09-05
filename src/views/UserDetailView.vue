@@ -63,7 +63,7 @@
       updateUser() {
         this.$store.dispatch('updateUser', this.user)
           .then(() => {
-            this.$router.push('/admin');
+            this.$router.push('/');
           })
           .catch(err => {
             console.error("Failed to update user:", err);
@@ -72,7 +72,6 @@
       async handleLogout() {
   try {
     await this.$store.dispatch('logout');
-    // Additional actions if needed after successful logout
   } catch (error) {
     console.error('Logout failed:', error);
   }
