@@ -51,6 +51,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "orderDetail" */ '../views/OrderDetailView.vue')
   },
   {
+    path: '/orderAdd',
+    name: 'orderAdd',
+    component: () => import(/* webpackChunkName: "itemAdd" */ '../views/ItemAddView.vue')
+  },
+  {
+    path: '/orderEdit/:id',
+    name: 'orderEdit',
+    component: () => import(/* webpackChunkName: "itemEdit" */ '../views/OrderEditView.vue')
+  },
+  {
     path: '/users',
     name: 'users',
     component: () => import(/* webpackChunkName: "users" */ '../views/UsersView.vue')
@@ -105,7 +115,7 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = !!token 
   const userRole = store.state.user?.userRole 
 
-  if (to.name === 'Admin') {
+  if (to.userRole === 'admin') {
     if (!isAuthenticated) {
       next({ name: 'login' }) 
       toast.error('Please login to access this page.', {

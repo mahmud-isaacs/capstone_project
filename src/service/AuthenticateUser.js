@@ -6,9 +6,8 @@ function applyToken(token) {
   }
 }
 
-// Add request interceptor to include token in headers for all requests
 axios.interceptors.request.use(config => {
-  const token = localStorage.getItem('token'); // Or use cookies
+  const token = localStorage.getItem('token'); 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
