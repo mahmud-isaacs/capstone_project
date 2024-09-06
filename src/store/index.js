@@ -214,9 +214,9 @@ export default createStore({
     async fetchItems({ commit }) {
       try {
         const response = await axios.get(`${apiURL}items`);
-        console.log(response);  // Log the entire response
+        console.log(response);  
         if (response.data) {
-          commit("setItems", response.data.results || response.data); // Adjust based on the structure
+          commit("setItems", response.data.results || response.data);
         } else {
           toast.error(`${response.msg || 'Failed to fetch items'}`, {
             autoClose: 3000,
@@ -224,7 +224,7 @@ export default createStore({
           });
         }
       } catch (error) {
-        console.error(error);  // Log the error
+        console.error(error);  
         toast.error(`${error.message}`, {
           autoClose: 3000,
           position: toast.POSITION.BOTTOM_CENTER,
@@ -293,7 +293,7 @@ export default createStore({
       }
     },
     
-    async deleteItems(context, id) {
+    async deleteItem(context, id) {
       try {
         const { msg } = await (
           await axios.delete(`${apiURL}items/delete/${id}`)
@@ -316,8 +316,8 @@ export default createStore({
     async fetchOrders({ commit }) {
       try {
         let { data, msg } = await axios.get(`${apiURL}orders`);
-        if (data.results) {
-          commit("setOrders", data.results);
+        if (data) {
+          commit('setOrders', data.result || data);
           console.log(data);
         } else {
           toast.error(`${msg}`, {
