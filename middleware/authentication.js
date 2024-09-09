@@ -35,4 +35,10 @@ const checkUser = async (req, res, next) => {
     }
 };
 
+// const checkToken = async (req, res, next) => {
+//     const token = req.body.token || req.query.token || req.headers['authToken']
+//     console.log(token);
+    
+// }
+
 export { checkUser };

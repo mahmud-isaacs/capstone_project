@@ -8,6 +8,8 @@ router.get('/', fetchUsers)
 
 router.get('/:id', fetchUser)
 
+// router.get('/auth', checkToken)
+
 router.post('/login', checkUser, loginUser)
 
 router.post('/register', addUser)

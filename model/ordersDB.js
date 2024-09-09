@@ -30,9 +30,12 @@ const addOrderDb = async (userID, itemID, quantity, totalPrice, status, timeSlot
 const getUserOrderDb = async (userID) => {
     try {
       const strQry = `
-        SELECT o.*
+        SELECT o.*, i.itemName
         FROM orders o
-        INNER JOIN users u ON o.userID = u.userID
+        INNER JOIN users u 
+		USING(userID)
+        LEFT JOIN items i
+        USING(itemID)
         WHERE u.userID = ?
       `;
       let [data] = await pool.query(strQry, [userID]);
