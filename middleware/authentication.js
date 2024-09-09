@@ -1,6 +1,6 @@
 import { compare } from "bcrypt";
 import { loginUserDb } from "../model/usersDB.js";
-import jwt from 'jsonwebtoken';
+import jwt, { decode } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -23,7 +23,7 @@ const checkUser = async (req, res, next) => {
 
             if (result) {
                 const token = jwt.sign({ userName: userName }, process.env.SECRET_KEY, { expiresIn: '1h' });
-                console.log(token);
+                console.log('this is sign in token',token);
                 req.body.token = token;
                 next();
             } else {
@@ -35,10 +35,23 @@ const checkUser = async (req, res, next) => {
     }
 };
 
-// const checkToken = async (req, res, next) => {
-//     const token = req.body.token || req.query.token || req.headers['authToken']
-//     console.log(token);
+const checkToken = async (req, res, next) => {
+    const {cookie} = req.headers
+    let token = cookie && cookie.split('authToken=')[1]
+    console.log(JSON.stringify(cookie));
     
-// }
+    console.log(token);
+    jwt.verify(token,process.env.SECRET_KEY,(err, decoded)=>{
+        if(err){
+            res.json({message:'Invalid token'})
+            return 
+    }
+    req.body.token = decoded
+    console.log(decoded);
+    next()
+    
+})
+    
+}
 
-export { checkUser };
+export { checkUser, checkToken };
