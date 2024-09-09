@@ -1,4 +1,4 @@
-import { getOrdersDb,getOrderDb,addOrderDb,deleteOrderDb,updateOrderDb } from "../model/ordersDB.js";
+import { getOrdersDb,getOrderDb,addOrderDb,deleteOrderDb,updateOrderDb, getUserOrderDb } from "../model/ordersDB.js";
 
 const fetchOrders = async(req,res) =>{
     res.json(await getOrdersDb())
@@ -7,6 +7,25 @@ const fetchOrders = async(req,res) =>{
 const fetchOrder = async(req,res)=>{
     res.json(await getOrderDb(req.params.id))
 }
+
+const getUserOrder = async (req, res) => {
+    try {
+      const userID = req.params.id;
+      const orders = await getUserOrderDb(userID);
+      res.status(200).json({
+        status: 200,
+        message: 'Orders retrieved successfully',
+        data: orders,
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        message: 'An error occurred while fetching the orders',
+        error: error.message,
+      });
+    }
+  };
+  
 
 const addOrder = async (req, res) => {
     try {
@@ -46,4 +65,4 @@ const updateOrder = async (req, res) => {
     }
 };
 
-export {fetchOrders,fetchOrder,addOrder,deleteOrder,updateOrder}
+export {fetchOrders,fetchOrder,addOrder,deleteOrder,updateOrder, getUserOrder}

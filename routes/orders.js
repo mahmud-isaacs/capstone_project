@@ -1,5 +1,5 @@
 import express from 'express'
-import { fetchOrders,fetchOrder,addOrder,deleteOrder,updateOrder } from '../controller/ordersController.js'
+import { fetchOrders,fetchOrder,addOrder,deleteOrder,updateOrder, getUserOrder } from '../controller/ordersController.js'
 
 const router = express.Router()
 
@@ -12,5 +12,7 @@ router.post('/addOrder', addOrder)
 router.patch('/update/:id', updateOrder)
 
 router.delete('/delete/:id', deleteOrder)
+
+router.get('/user/:id', getUserOrder)
 
 export default router
