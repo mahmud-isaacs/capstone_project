@@ -27,6 +27,22 @@ const addOrderDb = async (userID, itemID, quantity, totalPrice, status, timeSlot
     `, [userID, itemID, quantity, totalPrice, status, timeSlot, orderDate, bookingDate]);
 }
 
+const getUserOrderDb = async (userID) => {
+    try {
+      const strQry = `
+        SELECT o.*
+        FROM orders o
+        INNER JOIN users u ON o.userID = u.userID
+        WHERE u.userID = ?
+      `;
+      let [data] = await pool.query(strQry, [userID]);
+      return data;
+      
+    } catch (error) {
+      throw new Error(`Unable to fetch user orders: ${error.message}`);
+    }
+  };
+
 const deleteOrderDb = async(id) =>{
     await pool.query(
         `DELETE FROM orders WHERE orderID = ?`, [id]
@@ -45,4 +61,4 @@ const updateOrderDb = async (quantity, totalPrice, status, timeSlot, bookingDate
     `, [quantity, totalPrice, status, timeSlot, bookingDate, orderID]);
 }
 
-export{getOrdersDb,getOrderDb,addOrderDb,deleteOrderDb,updateOrderDb}
+export{getOrdersDb,getOrderDb,addOrderDb,deleteOrderDb,updateOrderDb, getUserOrderDb};
