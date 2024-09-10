@@ -16,7 +16,7 @@ const addUser = async (req, res) => {
     let { firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile } = req.body;
 
     try {
-        const hashedPassword = await hash(userPass, 10); // Hash password
+        const hashedPassword = await hash(userPass, 10); 
         console.log("Password hashed successfully.");
 
         await addUserDb(firstName, lastName, userName, userAge, gender, userRole, userAdd, hashedPassword, userProfile);
@@ -97,12 +97,11 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ msg: "User not found" });
         }
 
-        const isPasswordMatch = await compare(userPass, user.userPass);
+        const isPasswordMatch = await compare(userPass, user.userPass); 
         if (!isPasswordMatch) {
             return res.status(401).json({ msg: "Invalid password" });
         }
 
-        // Generate token
         const token = jwt.sign({ id: user.userID, userName: user.userName }, process.env.SECRET_KEY, {
             expiresIn: "7d",
         });

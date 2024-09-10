@@ -20,10 +20,10 @@ const getUserDb = async(id)=>{
     return data
 }
 
-const loginUserDb = async(userName) =>{
-    const [[data]] = await pool.query('SELECT * FROM users WHERE userName = ?' , [userName])
-    return data
-}
+const loginUserDb = async (userName) => {
+    const [data] = await pool.query('SELECT * FROM users WHERE userName = ?', [userName]);
+    return data.length > 0 ? data[0] : null;
+};
 
 const addUserDb = async(firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile) => {
     try {
