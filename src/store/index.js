@@ -63,11 +63,29 @@ export default createStore({
     addOrder(state, payload) {
       state.orders.push(payload);
     },
+    updateUser(state, payload) {
+      const index = state.users.findIndex(user => user.userID === payload.userID);
+      if (index !== -1) {
+        state.users.splice(index, 1, payload);
+      }
+    },
+    deleteUser(state, userID) {
+      state.users = state.users.filter(user => user.userID !== userID);
+    },
     updateOrder(state, payload) {
       const index = state.orders.findIndex(order => order.orderID === payload.orderID);
       if (index !== -1) {
         state.orders.splice(index, 1, payload);
       }
+    },
+    updateItem(state, payload) {
+      const index = state.items.findIndex(item => item.itemID === payload.itemID);
+      if (index !== -1) {
+        state.items.splice(index, 1, payload);
+      }
+    },
+    deleteItem(state, itemID) {
+      state.items = state.items.filter(item => item.itemID !== itemID);
     },
     deleteOrder(state, orderID) {
       state.orders = state.orders.filter(order => order.orderID !== orderID);
@@ -155,7 +173,52 @@ export default createStore({
     },
     
     
-    
+    async updateUser({ dispatch }, user) {
+      try {
+        const { data } = await axios.patch(`${apiURL}users/update/${user.id}`, user);
+        if (data.msg) {
+          dispatch("fetchUsers");
+          toast.success('User updated successfully!', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        } else {
+          toast.error('Failed to update user', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        }
+      } catch (e) {
+        toast.error(`Error: ${e.message}`, {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      }
+    },
+
+    async deleteUser({ dispatch }, id) {
+      try {
+        const { data } = await axios.delete(`${apiURL}users/delete/${id}`);
+        if (data.msg) {
+          dispatch("fetchUsers");
+          toast.success('User deleted successfully!', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        } else {
+          toast.error('Failed to delete user', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        }
+      } catch (e) {
+        toast.error(`Error: ${e.message}`, {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      }
+    },
+  
     
     
 
@@ -280,6 +343,75 @@ export default createStore({
         });
       }
     },
+
+    async updateItem({ dispatch }, payload) {
+      try {
+        const { data } = await axios.patch(`${apiURL}items/update/${payload.itemID}`, payload);
+        if (data.msg) {
+          dispatch("fetchItems");
+          toast.success('item updated successfully!', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        } else {
+          toast.error('Failed to update item', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        }
+      } catch (e) {
+        toast.error(`Error: ${e.message}`, {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      }
+    },
+
+    async addItem({ dispatch }, payload) {
+      try {
+        const { data } = await axios.post(`${apiURL}items/addItem`, payload);
+        if (data.msg) {
+          dispatch("fetchItems");
+          toast.success('item added successfully!', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        } else {
+          toast.error('Failed to add item', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        }
+      } catch (e) {
+        toast.error(`Error: ${e.message}`, {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      }
+    },
+
+    async deleteItem({ dispatch }, id) {
+      try {
+        const { data } = await axios.delete(`${apiURL}items/delete/${id}`);
+        if (data.msg) {
+          dispatch("fetchItems");
+          toast.success('item deleted successfully!', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        } else {
+          toast.error('Failed to delete item', {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        }
+      } catch (e) {
+        toast.error(`Error: ${e.message}`, {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      }
+    },
     
     async fetchOrders({ commit }) {
       try {
@@ -304,7 +436,7 @@ export default createStore({
       try {
         const { data } = await axios.get(`${apiURL}orders/${id}`);
         if (data) {
-          commit("setOrder", data.result);
+          commit("setOrder", data.result || data);
         } else {
           toast.error('Failed to fetch order', {
             autoClose: 2000,

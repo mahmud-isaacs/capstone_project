@@ -1,27 +1,44 @@
 <template>
     <div class="container">
-        <form id="editItemForm" v-if="item" @submit.prevent="updateItem">
+        <form id="editOrderForm" v-if="order" @submit.prevent="updateOrder">
             <div class="mb-3">
-                <img class="itemImg" :src="item.itemUrl" alt="" />
-            </div>
-            <div class="mb-3">
-                <label for="editItemName" class="form-label">Item Name</label>
-                <input v-model="item.itemName" type="text" class="form-control text-center" id="editItemName"
+                <label for="editQuantity" class="form-label">Quantity</label>
+                <input v-model="order.quantity" type="text" class="form-control text-center" id="editQuantity"
                     required />
             </div>
             <div class="mb-3">
-                <label for="editItemDescription" class="form-label">Description</label>
-                <input v-model="item.itemDescription" type="text" class="form-control text-center" id="editItemDescription"
+                <label for="editTotalPrice" class="form-label">Total Price</label>
+                <input v-model="order.totalPrice" type="number" class="form-control text-center" id="editTotalPrice"
                     required />
             </div>
             <div class="mb-3">
-                <label for="editItemImage" class="form-label">Image URL</label>
-                <input v-model="item.itemUrl" type="url" class="form-control text-center" id="editItemImage"
+                <label for="editStatus" class="form-label">Status</label>
+                <input v-model="order.status" type="text" class="form-control text-center" id="editStatus"
                     required />
             </div>
             <div class="mb-3">
-                <label for="editItemPrice" class="form-label">Price</label>
-                <input v-model="item.itemPrice" type="number" step="0.01" class="form-control text-center"
+                <label for="editTimeSlot" class="form-label">Time slot</label>
+                <input v-model="order.timeSlot" type="text" class="form-control text-center" id="editTimeSlot"
+                    required />
+            </div>
+            <div class="mb-3">
+                <label for="editOrderDate" class="form-label">Order Date</label>
+                <input v-model="order.orderDate" type="text" step="0.01" class="form-control text-center"
+                    id="editOrderDate" required />
+            </div>
+            <div class="mb-3">
+                <label for="editBookingDate" class="form-label">Booking Date</label>
+                <input v-model="order.bookingDate" type="text" step="0.01" class="form-control text-center"
+                    id="editBookingDate" required />
+            </div>
+            <div class="mb-3">
+                <label for="editUserID" class="form-label">User ID</label>
+                <input v-model="order.userID" type="number" step="0.01" class="form-control text-center"
+                    id="editItemPrice" required />
+            </div>
+            <div class="mb-3">
+                <label for="editOrderDate" class="form-label">Item ID</label>
+                <input v-model="order.itemID" type="number" step="0.01" class="form-control text-center"
                     id="editItemPrice" required />
             </div>
             <div class="pb-3">
@@ -42,30 +59,30 @@
         return {};
     },
     methods: {
-        fetchItem() {
-            this.$store.dispatch("fetchItem", this.$route.params.id);
+        fetchOrder() {
+            this.$store.dispatch("fetchOrder", this.$route.params.id);
         },
-        updateItem() {
+        updateOrder() {
             this.$store
-                .dispatch("updateItem", this.item)
+                .dispatch("updateOrder", this.order)
                 .then(() => {
                     this.$router.push("/admin");
                 })
                 .catch((err) => {
-                    console.error("Failed to update item:", err);
+                    console.error("Failed to update order:", err);
                 });
         },
     },
     computed: {
-        item() {
-            return this.$store.state.item;
+        order() {
+            return this.$store.state.order;
         },
     },
     components: {
         Spinner,
     },
     mounted() {
-        this.fetchItem();
+        this.fetchOrder();
     },
   };
   </script>
