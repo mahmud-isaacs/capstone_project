@@ -14,6 +14,6 @@ router.patch('/update/:id', updateOrder)
 
 router.delete('/delete/:id', deleteOrder)
 
-router.get('/user/:id',verifyAToken, getUserOrder)
+router.get('/user/:id', getUserOrder)
 
 export default router

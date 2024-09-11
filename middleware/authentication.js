@@ -18,7 +18,11 @@ export function createToken(user) {
 
 export function verifyAToken(req, res, next) {
     try {
-        const token = req.cookies["Valid User"];
+        console.log('hehe');
+        // const token = req.cookies["Valid User"];
+        // console.log(req.headers.cookie.split('=')[2]);
+        const token =req.headers.cookie && req.headers.cookie.split('=')[2];
+        console.log('hehe2');
         if (token) {
             const valid = verify(token, process.env.SECRET_KEY);
             if (valid) {
