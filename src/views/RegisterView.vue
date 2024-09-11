@@ -61,26 +61,25 @@ export default {
         userRole: 'user',
         userAdd: '',
         userPass: '',
-        userProfile: 'https://codjoelmayer.github.io/projectImages/images/profile-Image.png'
+        userProfile: 'https://codjoelmayer.github.io/projectImages/images/profile-Image.png',
+        gender: '' 
       }
     };
   },
   methods: {
-    registerUser() {
-      this.$store.dispatch('registerUser', this.user)
-        .then(() => {
-          this.$router.push('login');
-        })
-        .catch(err => {
-          console.error("Failed to add user:", err);
-        });
+    async registerUser() {
+      try {
+        await this.$store.dispatch('registerUser', this.user);
+        this.$router.push('/login');
+      } catch (err) {
+        console.error("Failed to register user:", err);
+      }
     },
   }
 }
 </script>
 
 <style scoped>
-
 </style>
 
   

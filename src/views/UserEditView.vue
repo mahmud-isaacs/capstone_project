@@ -61,7 +61,7 @@ import Spinner from '@/components/SpinnerComp.vue'
 export default {
   methods: {
     fetchUser() {
-      this.$store.dispatch('fetchUser', this.$route.params.id)
+      this.$store.dispatch('fetchUser', this.$route.params?.id)
     },
     updateUser() {
       this.$store.dispatch('updateUser', this.user)

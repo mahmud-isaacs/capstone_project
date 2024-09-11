@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <h2>Select a Date and Time Slot</h2>
+    
     <input type="date" v-model="selectedDate" @change="openDropdown" />
-
     <div v-if="showDropdown" class="dropdown">
       <label for="items">Select an item:</label>
       <select v-model="selectedItem" id="items">
@@ -18,25 +18,21 @@
       {{ selectedItem }}
       {{ selectedTimeSlot }}
       {{ selectedDate }}
-      <!-- <button @click="addItem">Add order</button> -->
-
+      <button @click="addItem()">Confirm</button>
       <div v-if="selectedItems.length > 0">
         <h3>Your Order:</h3>
         <ul>
-          <!-- <li v-for="(item, index) in selectedItems" :key="index">
+          <li v-for="(item, index) in selectedItems" :key="index">
             {{ item.itemName }} - {{ item.timeSlot }}
-          </li> -->
+          </li>
         </ul>
       </div>
-
-      <button @click="addItem()">Confirm</button>
     </div>
+    <button @click="goToOrders">View Orders</button>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-
 export default {
   data() {
     return {
@@ -49,45 +45,42 @@ export default {
     };
   },
   computed: {
-    ...mapState(['items']),
+    items() {
+      return this.$store.state.items;
+    }
   },
   created() {
     this.fetchItems();
   },
   methods: {
-    ...mapActions(['fetchItems']),
+    fetchItems() {
+      this.$store.dispatch('fetchItems');
+    },
     openDropdown() {
       if (this.selectedDate) {
         this.showDropdown = true;
       }
     },
     addItem() {
-      this.$store.dispatch('addOrder',{timeSlot:this.selectedTimeSlot,itemID:this.selectedItem.itemID,bookingDate:this.selectedDate})
-      // if (this.selectedItem && this.selectedTimeSlot) {
-      //   this.selectedItems.push({
-      //     itemName: this.selectedItem.itemName,
-      //     timeSlot: this.selectedTimeSlot
-      //   });
-      //   this.resetSelection();
-      // } else {
-      //   alert("Please select an item and a time slot");
-      // }
+      this.$store.dispatch('addOrder', {
+        timeSlot: this.selectedTimeSlot,
+        itemID: this.selectedItem.itemID,
+        bookingDate: this.selectedDate
+      });
+      this.selectedItems.push({
+        itemName: this.selectedItem.itemName,
+        timeSlot: this.selectedTimeSlot
+      });
+      this.resetSelection();
     },
-    // bookSlot() {
-    //   if (this.selectedItems.length > 0) {
-    //     alert(`Booking confirmed for the following items on ${this.selectedDate}:\n` +
-    //           this.selectedItems.map(item => `${item.itemName} at ${item.timeSlot}`).join('\n'));
-    //     this.selectedItems = []; 
-    //     this.resetSelection(); 
-    //   } else {
-    //     alert("Please add at least one item");
-    //   }
-    // },
     resetSelection() {
       this.selectedItem = null;
       this.selectedTimeSlot = "";
+    },
+    goToOrders() {
+      this.$router.push({ name: "orders" });
     }
-  }
+  },
 };
 </script>
 
@@ -129,6 +122,7 @@ button:hover {
   background-color: burlywood;
 }
 </style>
+
 
 
 
