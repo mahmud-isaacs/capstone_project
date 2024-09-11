@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-body">
             <h3 class="card-title text-center mb-4">{{ user ? 'Welcome' : 'Login' }}</h3>
-            <form v-if="!user" @submit.prevent="handleLogin">
+            <form v-if="!user" @submit.prevent="login">
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input v-model="username" type="text" class="form-control" id="username" placeholder="Enter username" required />
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+
 
 export default {
   data() {
@@ -36,29 +36,25 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user']),
   },
   methods: {
-    ...mapActions(['login', 'logout']),
-    async handleLogin() {
-      try {
-        await this.login({
-          userName: this.username,
-          userPass: this.password,
-        });
-      } catch (error) {
-        console.error('Login failed:', error);
-      }
-    },
     async handleLogout() {
       try {
-        await this.logout();
+        this.logout()
       } catch (error) {
         console.error('Logout failed:', error);
       }
+    },
+    login(){
+      this.$store.dispatch('login', {userName:this.username, userPass:this.password})
+    },
+    logout(){
+      this.$store.dispatch('logout')
     }
   }
 };
+
+
 </script>
   
   <style scoped>

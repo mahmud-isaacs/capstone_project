@@ -9,7 +9,6 @@
           <h5 class="card-title">{{ item.itemName }}</h5>
           <p>{{ item.itemDescription }}</p>
           <p class="lead"><span class="text-success">Price</span>: R{{ item.itemPrice }}</p>
-          <!-- New Book Button -->
           <router-link to="/booking">
             <button class="btn btn-primary">Book</button>
           </router-link>

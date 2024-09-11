@@ -31,16 +31,17 @@
             <router-link class="nav-link" to="/contact" active-class="active-link">Contact Us</router-link>
           </li>
         </ul>
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item" v-if="user">
-          <router-link :to="{ name: 'userDetail', params: { id: user.id } }">
-          <img :src="user.userProfile" alt="Profile" class="profile-icon">
-            </router-link>    
-      </li>
-  <li class="nav-item" v-else>
-    <router-link :to="{ name: 'login' }" class="nav-link">
-      Login
-    </router-link>
+        <!-- {{ typeof $cookies.get('authToken') }} -->
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item" v-if=" mase">
+            <router-link :to="{ name: 'userDetail', params: { id: user.id } }">
+              <img :src="user.userProfile" alt="Profile" class="profile-icon">
+            </router-link>  
+          </li>
+          <li class="nav-item" v-else>
+            <router-link :to="{ name: 'login' }" class="nav-link">
+              Login
+            </router-link>
           </li>
         </ul>
       </div>
@@ -50,14 +51,37 @@
 
 
 <script>
-import { mapGetters } from 'vuex';
-
+/*eslint-disable*/
+import { useCookies } from 'vue3-cookies';
+let {cookies} = useCookies()
 export default {
   computed: {
-    ...mapGetters(['user']), // Access user from Vuex store
+    isLoggedIn() {
+      return this.$store.state.userID !== null;
+    },
+    user() {
+      this.$store.commit('setUser',cookies.get('user'))
+      return this.$store.state.user; 
+    },
+    mase(){
+      return typeof cookies.get('authToken') === 'string'
+    }
   },
+  methods: {
+    async verify() {
+      try {
+        await this.$store.dispatch('verify');
+      } catch (error) {
+        console.error('Verification failed:', error.message);
+      }
+    }
+  },
+  async mounted() {
+    await this.verify();
+  }
 };
 </script>
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
@@ -89,6 +113,8 @@ export default {
 .profile-icon {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 50%;  
 }
 </style>
+
+
