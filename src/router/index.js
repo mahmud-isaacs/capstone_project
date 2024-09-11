@@ -53,7 +53,7 @@ const routes = [
   {
     path: '/orderAdd',
     name: 'orderAdd',
-    component: () => import(/* webpackChunkName: "itemAdd" */ '../views/ItemAddView.vue')
+    component: () => import(/* webpackChunkName: "itemAdd" */ '../views/OrderAddView.vue')
   },
   {
     path: '/orderEdit/:id',
