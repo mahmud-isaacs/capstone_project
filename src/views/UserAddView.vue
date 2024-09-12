@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container pb-4 restaurant-theme">
     <form id="addUserForm" @submit.prevent="registerUser">
       <div class="mb-3">
         <label for="addUserFirstName" class="form-label">First Name</label>
@@ -37,8 +37,8 @@
         <label for="addUserProfile" class="form-label">Profile Pic</label>
         <input v-model="user.userProfile" type="url" class="form-control text-center" id="addUserProfile">
       </div>
-      <div class="pb-3">
-        <button type="submit" class="btn btn-primary">Save changes</button>
+      <div class="pb-3 text-center">
+        <button type="submit" class="btn btn-custom">Add User</button>
       </div>
     </form>
   </div>
@@ -74,4 +74,28 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.restaurant-theme {
+  background-color: #F5F5F5; /* Light background for consistency */
+  font-family: 'Georgia', serif;
+}
+
+.form-control {
+  border: 1px solid #6A7B4C; /* Green border to match the theme */
+  border-radius: 0.25rem;
+}
+
+.btn-custom {
+  background-color: #6A7B4C; /* Green button color to fit the theme */
+  color: white;
+  font-weight: bold;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  border: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn-custom:hover {
+  background-color: #829b61; /* Slightly lighter green for hover */
+}
+</style>

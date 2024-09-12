@@ -31,12 +31,11 @@
             <router-link class="nav-link" to="/contact" active-class="active-link">Contact Us</router-link>
           </li>
         </ul>
-        <!-- {{ typeof $cookies.get('authToken') }} -->
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item" v-if=" mase">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item" v-if="mase">
             <router-link :to="{ name: 'userDetail', params: { id: user.id } }">
               <img :src="user.userProfile" alt="Profile" class="profile-icon">
-            </router-link>  
+            </router-link>
           </li>
           <li class="nav-item" v-else>
             <router-link :to="{ name: 'login' }" class="nav-link">
@@ -48,6 +47,10 @@
     </div>
   </nav>
 </template>
+
+
+
+
 
 
 <script>
@@ -87,33 +90,94 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 
 .custom-bg-green {
-  background-color: #C4C5BA; 
+  background-color: #8E8C6C; /* A more refined shade for a restaurant feel */
+  border-bottom: 3px solid #6A7B4C; /* Add a bottom border for a subtle separation */
+}
+
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+
+.navbar-toggler-icon {
+  background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"%3E%3Cpath stroke="rgb(255, 255, 255)" stroke-width="2" d="M5 8h20M5 15h20M5 22h20"/%3E%3C/svg%3E');
 }
 
 .nav-link {
-  color: #595f39;
+  color: #F5F5F5; /* Light color for better contrast */
   font-family: "Archivo Black", sans-serif;
-  font-size: 0.7rem; 
-  margin-left: 7rem;
-  transition: color 0.3s ease;
+  font-size: 0.8rem; /* Slightly larger for readability */
+  padding: 10px 15px; /* Increase padding for touch targets */
+  transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #ffffff; 
+  color: #F1C40F; /* Highlight color for hover */
+  background-color: #6A7B4C; /* Subtle background change on hover */
+  border-radius: 5px; /* Rounded corners for a softer look */
 }
 
 .active-link {
-  color: #ffffff;
+  color: #F1C40F; /* Highlight color for active links */
 }
 
 .imageLogo {
-  width: 40px;
+  width: 50px; /* Slightly larger logo */
 }
 
 .profile-icon {
   width: 40px;
   height: 40px;
   border-radius: 50%;  
+  border: 2px solid #F1C40F; /* Border around profile icon */
+}
+
+.navbar-nav {
+  flex-direction: row;
+}
+
+.navbar-nav .nav-item {
+  margin-bottom: 0;
+}
+
+@media (max-width: 992px) {
+  .navbar-nav {
+    text-align: center;
+  }
+  .navbar-nav .nav-item {
+    margin-bottom: 1rem;
+  }
+  .navbar-nav .nav-link {
+    margin-left: 0;
+  }
+  .imageLogo {
+    width: 40px; /* Adjust size for tablets */
+  }
+  .profile-icon {
+    width: 35px; /* Adjust size for tablets */
+    height: 35px; /* Adjust size for tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-toggler {
+    border: none;
+  }
+  .navbar-collapse {
+    margin-top: 1rem;
+  }
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .navbar-nav .nav-item {
+    margin-bottom: 1rem;
+  }
+  .navbar-nav .nav-link {
+    font-size: 1rem; /* Adjust font size for mobile */
+    padding: 10px; /* Increase padding for touch targets */
+  }
 }
 </style>
 

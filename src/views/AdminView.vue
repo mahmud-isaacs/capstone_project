@@ -12,11 +12,11 @@ import AdminUsers from '@/components/AdminUsers.vue';
 import AdminOrders from '@/components/AdminOrders.vue';
 
 export default {
-components: {
-  AdminItems,
-  AdminUsers,
-  AdminOrders
-},
+  components: {
+    AdminItems,
+    AdminUsers,
+    AdminOrders,
+  },
 };
 </script>
 

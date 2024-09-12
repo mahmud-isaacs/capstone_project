@@ -1,63 +1,70 @@
 <template>
-    <div class="container">
-      <h5>Orders</h5>
-      <input v-model="searchQuery" placeholder="Search by status..." class="form-control mb-3" />
-      
-      <div class="table-responsive" v-if="filteredOrders.length">
-        <table class="table table-orders">
-          <thead>
-            <tr>
-              <th scope="col">OrderId</th>
-              <th scope="col">Quantity</th>
-              <th scope="col" class="d-none d-md-table-cell">Total Price</th>
-              <th scope="col" class="d-none d-md-table-cell">Status</th>
-              <th scope="col" class="d-none d-md-table-cell">Time slot</th>
-              <th scope="col" class="d-none d-md-table-cell">Date of order</th>
-              <th scope="col" class="d-none d-md-table-cell">Booking date</th>
-              <th scope="col" class="d-none d-md-table-cell">userID</th>
-              <th scope="col" class="d-none d-md-table-cell">itemId</th>
-              <th scope="col">Edit</th>
-              <th scope="col">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="order in filteredOrders" :key="order.orderID">
-              <td>{{ order.orderID }}</td>
-              <td>{{ order.quantity }}</td>
-              <td class="d-none d-md-table-cell">R{{ order.totalPrice }}</td>
-              <td class="d-none d-md-table-cell">{{ order.status }}</td>
-              <td class="d-none d-md-table-cell">{{ order.timeSlot }}</td>
-              <td class="d-none d-md-table-cell">{{ order.orderDate }}</td>
-              <td class="d-none d-md-table-cell">{{ order.bookingDate }}</td>
-              <td class="d-none d-md-table-cell">{{ order.userID }}</td>
-              <td class="d-none d-md-table-cell">{{ order.itemID }}</td>
-              <td>
-                <router-link :to="{ name: 'orderEdit', params: { id: order.orderID } }">
-                  <button class="btn btn-sm"><i class="bi bi-pencil-square"></i></button>
-                </router-link>
-              </td>
-              <td>
-                <button class="btn btn-sm" @click="deleteOrder(order.orderID)"><i class="bi bi-trash-fill"></i></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div v-else>
-        <Spinner v-if="loading" />
-        <p v-else>No orders found.</p>
-      </div>
-      
-      <div class="d-flex justify-content-center align-items-center">
-        <p class="my-auto">Add order</p>
-        <router-link :to="{ name: 'orderAdd' }">
-          <i class="bi-plus-square-fill mx-2"></i>
-        </router-link>
-      </div>
-      <hr>
+  <div class="container restaurant-booking">
+    <h5 class="title">Order Reservations</h5>
+    <input
+      v-model="searchQuery"
+      placeholder="Search by order status..."
+      class="form-control mb-3 search-bar"
+    />
+    <div class="table-responsive" v-if="filteredOrders.length">
+      <table class="table table-orders table-bordered">
+        <thead>
+          <tr class="table-header">
+            <th scope="col">OrderId</th>
+            <th scope="col">Quantity</th>
+            <th scope="col" class="d-none d-md-table-cell">Total Price</th>
+            <th scope="col" class="d-none d-md-table-cell">Status</th>
+            <th scope="col" class="d-none d-md-table-cell">Time slot</th>
+            <th scope="col" class="d-none d-md-table-cell">Date of order</th>
+            <th scope="col" class="d-none d-md-table-cell">Booking date</th>
+            <th scope="col" class="d-none d-md-table-cell">User ID</th>
+            <th scope="col" class="d-none d-md-table-cell">Item ID</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="order in filteredOrders" :key="order.orderID" class="table-row">
+            <td>{{ order.orderID }}</td>
+            <td>{{ order.quantity }}</td>
+            <td class="d-none d-md-table-cell">R{{ order.totalPrice }}</td>
+            <td class="d-none d-md-table-cell">{{ order.status }}</td>
+            <td class="d-none d-md-table-cell">{{ order.timeSlot }}</td>
+            <td class="d-none d-md-table-cell">{{ order.orderDate }}</td>
+            <td class="d-none d-md-table-cell">{{ order.bookingDate }}</td>
+            <td class="d-none d-md-table-cell">{{ order.userID }}</td>
+            <td class="d-none d-md-table-cell">{{ order.itemID }}</td>
+            <td>
+              <router-link :to="{ name: 'orderEdit', params: { id: order.orderID } }">
+                <button class="btn btn-sm action-btn edit-btn">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </router-link>
+            </td>
+            <td>
+              <button class="btn btn-sm action-btn delete-btn" @click="deleteOrder(order.orderID)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </template>
+    
+    <div v-else>
+      <Spinner v-if="loading" />
+      <p v-else>No orders found.</p>
+    </div>
+    
+    <div class="d-flex justify-content-center align-items-center add-item-section">
+      <p class="my-auto">Add Order</p>
+      <router-link :to="{ name: 'orderAdd' }">
+        <i class="bi bi-plus-square-fill mx-2"></i>
+      </router-link>
+    </div>
+    <hr />
+  </div>
+</template>
   
   <script>
   import Spinner from '@/components/SpinnerComp.vue';
@@ -114,26 +121,78 @@
   </script>
   
   <style scoped>
-  .container {
-    max-width: 100%;
-  }
-  
+.container {
+  max-width: 90%;
+  margin: auto;
+  background-color: #fff7f0; /* Soft background color for restaurant ambiance */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  color: #a52a2a;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-bar {
+  border-radius: 30px;
+  padding: 10px 20px;
+  border: 1px solid #d4a373;
+}
+
+.table-orders {
+  background-color: white;
+  font-family: 'Lora', serif;
+}
+
+.table-header {
+  background-color: #e6b8a2;
+  color: #6b4226;
+  font-weight: bold;
+}
+
+.table-row {
+  border-bottom: 1px solid #d4a373;
+}
+
+.action-btn {
+  background-color: transparent;
+  border: none;
+  color: #d4a373;
+}
+
+.edit-btn:hover {
+  color: #6b4226;
+}
+
+.delete-btn:hover {
+  color: #a52a2a;
+}
+
+i {
+  font-size: 1.5rem;
+  color: #a52a2a;
+}
+
+.add-item-section {
+  font-family: 'Lora', serif;
+  color: #a52a2a;
+}
+
+.add-item-section i {
+  color: #d4a373;
+}
+
+.add-item-section i:hover {
+  color: #6b4226;
+}
+
+@media (max-width: 575px) {
   .table-orders th,
   .table-orders td {
-    white-space: nowrap;
-    vertical-align: middle;
+    font-size: 0.9rem;
   }
-  
-  @media (max-width: 575px) {
-    .table-orders th,
-    .table-orders td {
-      font-size: 0.8rem;
-    }
-  }
-  
-  i {
-    font-size: 2rem;
-    color: #e21861;
-  }
-  </style>
-  
+}
+</style>
