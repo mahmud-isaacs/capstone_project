@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useStore } from 'vuex'
+// import { useStore } from 'vuex'
 import { useCookies } from 'vue3-cookies'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -28,7 +28,8 @@ const routes = [
   {
     path: '/itemDetail/:id',
     name: 'itemDetail',
-    component: () => import(/* webpackChunkName: "itemDetail" */ '../views/ItemDetailView.vue')
+    component: () => import(/* webpackChunkName: "itemDetail" */ '../views/ItemDetailView.vue'),
+    meta: { requiresAuth: true},
   },
   {
     path: '/itemAdd',
@@ -43,7 +44,8 @@ const routes = [
   {
     path: '/orders',
     name: 'orders',
-    component: () => import(/* webpackChunkName: "orders" */ '../views/OrdersView.vue')
+    component: () => import(/* webpackChunkName: "orders" */ '../views/OrdersView.vue'),
+    meta: { requiresAuth: true}
   },
   {
     path: '/orderDetail/:id',
@@ -94,12 +96,13 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: () => import(/* webpackChunkName: "admin" */ '../views/AdminView.vue'),
-    meta: { requiresAdmin: true } 
+    meta: { requiresAuth: true, role: 'Admin' }
   },
   {
     path: '/booking',
     name: 'booking',
-    component: () => import(/* webpackChunkName: "bookings" */ '../views/BookingView.vue')
+    component: () => import(/* webpackChunkName: "bookings" */ '../views/BookingView.vue'),
+    meta: { requiresAuth: true},
   }
 ]
 
@@ -109,31 +112,29 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const store = useStore()
-  const { cookies } = useCookies()
-  const token = cookies.get('authToken') 
-  const isAuthenticated = !!token 
-  const userRole = store.state.user?.userRole 
+  const { cookies } = useCookies();
+  const currentUser = cookies.get('user');
+  const role = currentUser ? currentUser.userRole : 'USER';
 
-  if (to.userRole === 'admin') {
-    if (!isAuthenticated) {
-      next({ name: 'login' }) 
+  if (to.meta.requiresAuth) {
+    if (!currentUser) {
+      next({ name: 'login' });
       toast.error('Please login to access this page.', {
         autoClose: 3000,
         position: toast.POSITION.BOTTOM_CENTER,
-      })
-    } else if (userRole !== 'admin') {
-      next({ name: 'home' }) 
+      });
+    } else if (to.meta.role && role !== to.meta.role) {
+      next({ name: 'home' });
       toast.error('Access for Admins only.', {
         autoClose: 3000,
         position: toast.POSITION.BOTTOM_CENTER,
-      })
+      });
     } else {
-      next() 
+      next();
     }
   } else {
-    next() 
+    next();
   }
-})
+});
 
 export default router
