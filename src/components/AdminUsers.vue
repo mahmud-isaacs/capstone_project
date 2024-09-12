@@ -1,57 +1,67 @@
 <template>
-    <div class="container">
-      <h5>Users</h5>
-      <input v-model="searchQuery" placeholder="Search Users..." class="form-control mb-3"/>
-      <div class="table-responsive" v-if="filteredUsers.length">
-        <table class="table table-users">
-          <thead>
-            <tr>
-              <th scope="col">Id</th>
-              <th scope="col">Name</th>
-              <th scope="col" class="d-none d-sm-table-cell">Surname</th>
-              <th scope="col" class="d-none d-sm-table-cell">Username</th>
-              <th scope="col" class="d-none d-md-table-cell">Age</th>
-              <th scope="col" class="d-none d-md-table-cell">Gender</th>
-              <th scope="col" class="d-none d-lg-table-cell">Role</th>
-              <th scope="col" class="d-none d-lg-table-cell">Email</th>
-              <th scope="col">Edit</th>
-              <th scope="col">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in filteredUsers" :key="user.userID">
-              <td>{{ user.userID }}</td>
-              <td>{{ user.firstName }}</td>
-              <td class="d-none d-sm-table-cell">{{ user.lastName }}</td>
-              <td class="d-none d-sm-table-cell">{{ user.userName}}</td>
-              <td class="d-none d-md-table-cell">{{ user.userAge }}</td>
-              <td class="d-none d-md-table-cell">{{ user.gender }}</td>
-              <td class="d-none d-lg-table-cell">{{ user.userRole }}</td>
-              <td class="d-none d-lg-table-cell">{{ user.userAdd }}</td>
-              <td>
-                <router-link :to="{ name: 'userEdit', params: { id: user.userID } }">
-                  <button class="btn btn-sm"><i class="bi bi-pencil-square"></i></button>
-                </router-link>
-              </td>
-              <td>
-                <button class="btn btn-sm" @click="deleteUser(user.userID)"><i class="bi bi-trash-fill"></i></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div v-else>
-        <Spinner v-if="loading" />
-        <p v-else>No users found.</p>
-      </div>
-      <div class="d-flex justify-content-center align-items-center mb-4">
-        <p class="my-auto">Add User</p>
-        <router-link :to="{ name: 'userAdd' }">
-          <i class="bi bi-plus-square-fill mx-2"></i>
-        </router-link>
-      </div>
+  <div class="container user-management">
+    <h5 class="title">User Management</h5>
+    <input
+      v-model="searchQuery"
+      placeholder="Search Users..."
+      class="form-control mb-3 search-bar"
+    />
+    <div class="table-responsive" v-if="filteredUsers.length">
+      <table class="table table-users table-bordered">
+        <thead>
+          <tr class="table-header">
+            <th scope="col">ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col" class="d-none d-sm-table-cell">Last Name</th>
+            <th scope="col" class="d-none d-sm-table-cell">Username</th>
+            <th scope="col" class="d-none d-md-table-cell">Age</th>
+            <th scope="col" class="d-none d-md-table-cell">Gender</th>
+            <th scope="col" class="d-none d-lg-table-cell">Role</th>
+            <th scope="col" class="d-none d-lg-table-cell">Email</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in filteredUsers" :key="user.userID" class="table-row">
+            <td>{{ user.userID }}</td>
+            <td>{{ user.firstName }}</td>
+            <td class="d-none d-sm-table-cell">{{ user.lastName }}</td>
+            <td class="d-none d-sm-table-cell">{{ user.userName }}</td>
+            <td class="d-none d-md-table-cell">{{ user.userAge }}</td>
+            <td class="d-none d-md-table-cell">{{ user.gender }}</td>
+            <td class="d-none d-lg-table-cell">{{ user.userRole }}</td>
+            <td class="d-none d-lg-table-cell">{{ user.userAdd }}</td>
+            <td>
+              <router-link :to="{ name: 'userEdit', params: { id: user.userID } }">
+                <button class="btn btn-sm action-btn edit-btn">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </router-link>
+            </td>
+            <td>
+              <button class="btn btn-sm action-btn delete-btn" @click="deleteUser(user.userID)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </template>
+
+    <div v-else>
+      <Spinner v-if="loading" />
+      <p v-else>No users found.</p>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center add-item-section">
+      <p class="my-auto">Add User</p>
+      <router-link :to="{ name: 'userAdd' }">
+        <i class="bi bi-plus-square-fill mx-2"></i>
+      </router-link>
+    </div>
+  </div>
+</template>
   
   <script>
   import Spinner from '@/components/SpinnerComp.vue';
@@ -108,28 +118,78 @@
   </script>
   
   <style scoped>
-  .container {
-    max-width: 100%;
-  }
-  
-  .table-users th, 
+.container {
+  max-width: 90%;
+  margin: auto;
+  background-color: #fff7f0;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  color: #a52a2a;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-bar {
+  border-radius: 30px;
+  padding: 10px 20px;
+  border: 1px solid #d4a373;
+}
+
+.table-users {
+  background-color: white;
+  font-family: 'Lora', serif;
+}
+
+.table-header {
+  background-color: #e6b8a2;
+  color: #6b4226;
+  font-weight: bold;
+}
+
+.table-row {
+  border-bottom: 1px solid #d4a373;
+}
+
+.action-btn {
+  background-color: transparent;
+  border: none;
+  color: #d4a373;
+}
+
+.edit-btn:hover {
+  color: #6b4226;
+}
+
+.delete-btn:hover {
+  color: #a52a2a;
+}
+
+i {
+  font-size: 1.5rem;
+  color: #a52a2a;
+}
+
+.add-item-section {
+  font-family: 'Lora', serif;
+  color: #a52a2a;
+}
+
+.add-item-section i {
+  color: #d4a373;
+}
+
+.add-item-section i:hover {
+  color: #6b4226;
+}
+
+@media (max-width: 575px) {
+  .table-users th,
   .table-users td {
-    white-space: nowrap;  /* Prevent text from wrapping */
-    vertical-align: middle;
+    font-size: 0.9rem;
   }
-  
-  @media (max-width: 575px) {
-    .table-products th, .table-products td {
-      font-size: 0.8rem;  /* Smaller font size for mobile */
-    }
-  }
-  
-  .btn-sm {
-    font-size: 0.8rem;  /* Smaller button size */
-  }
-  
-  i {
-    font-size: 2rem;
-    color: #e21861;
-  }
-  </style>
+}
+</style>

@@ -284,26 +284,6 @@ export default createStore({
     },
     
 
-    // async initialize({ dispatch }) {
-    //   const { cookies } = useCookies();
-    //   const token = cookies.get('authToken');
-    
-    //   if (token) {
-    //     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    //     try {
-          // Fetch user data using the token
-    //       const { data } = await axios.get(`${apiURL}users/auth`);
-    //       if (data) {
-    //         dispatch('fetchUser', data.id);
-    //       }
-    //     } catch (e) {
-    //       console.error('Failed to fetch user data:', e.message);
-         // Token might be invalid, clear it
-    //       cookies.remove('authToken');
-    //     }
-    //   }
-    // },
-
     async fetchItems({ commit }) {
       try {
         const response = await axios.get(`${apiURL}items`);
@@ -474,11 +454,12 @@ export default createStore({
       }
     },
     
-    async addOrder({ dispatch }, payload) {
+    async addOrder({ commit }, payload) {
+      console.log('Payload to be sent:', payload);
       try {
         const { data } = await axios.post(`${apiURL}orders/addOrder`, payload);
-        if (data.msg) {
-          dispatch("fetchOrders");
+        if (data.success) {
+          commit('addOrder', data.order);
           toast.success('Order added successfully!', {
             autoClose: 2000,
             position: toast.POSITION.BOTTOM_CENTER,
@@ -496,6 +477,9 @@ export default createStore({
         });
       }
     },
+  
+    
+    
     
     async updateOrder({ dispatch }, payload) {
       try {
