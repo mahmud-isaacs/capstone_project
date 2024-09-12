@@ -1,6 +1,6 @@
 import express from 'express'
 import { fetchOrders,fetchOrder,addOrder,deleteOrder,updateOrder, getUserOrder } from '../controller/ordersController.js'
-import { verifyAToken } from '../middleware/authentication.js'
+// import { verifyAToken } from '../middleware/authentication.js'
 
 const router = express.Router()
 
