@@ -13,11 +13,11 @@ app.use(cors({
     credentials:true
 }))
 app.use((req,res, next)=>{
-    res.header("Access-Control-Allow-Origin", "http://localhost:8080");
+    res.header("Access-Control-Allow-Origin", "https://capstone-project-34e36.web.app");
   res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Methods", "http://localhost:8080");
-  res.header("Access-Control-Request-Methods", "http://localhost:8080");
-  res.header("Access-Control-Allow-Headers", "http://localhost:8080");
+  res.header("Access-Control-Allow-Methods", "https://capstone-project-34e36.web.app");
+  res.header("Access-Control-Request-Methods", "https://capstone-project-34e36.web.app");
+  res.header("Access-Control-Allow-Headers", "https://capstone-project-34e36.web.app");
   res.header("Access-Control-Expose-Headers", "Authorization");
   next();
 })
