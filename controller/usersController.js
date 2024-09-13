@@ -57,35 +57,35 @@ const updateUser = async (req, res) => {
     try {
         let { firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile } = req.body;
         let users = await getUserDb(req.params.id);
-
-        firstName?firstName=firstName:firstName = users.firstName
-        lastName?lastName=lastName:lastName = users.lastName
-        userName?userName=userName:userName = users.userName
-        userAge?userAge=userAge:userAge = users.userAge
-        gender?gender=gender:gender = users.gender
-        userRole?userRole=userRole:userRole = users.userRole
-        userAdd?userAdd=userAdd:userAdd = users.userAdd
-        userPass?userPass=userPass:userPass = users.userPass
-        userProfile?userProfile=userProfile:userProfile = users.userProfile
-
+        console.log('Incoming data:', req.body);
+        console.log('Existing user data:', users);
+        firstName = firstName ?? users.firstName;
+        lastName = lastName ?? users.lastName;
+        userName = userName ?? users.userName;
+        userAge = userAge ?? users.userAge;
+        gender = gender ?? users.gender;
+        userRole = userRole ?? users.userRole;
+        userAdd = userAdd ?? users.userAdd;
+        userProfile = userProfile ?? users.userProfile;
+        console.log('Fields to update:', {
+            firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile
+        });
         if (userPass) {
-            hash(userPass, 10, async (err, hashedP) => {
-                if (err) {
-                    return res.status(500).send('Error with password');
-                }
-                userPass = hashedP;
-                await updateUserDb(firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile, req.params.id);
-                return res.status(200).send('User was updated successfully');
-            });
+            const hashedPassword = await hash(userPass, 10);
+            console.log('New hashed password:', hashedPassword);
+            await updateUserDb(firstName, lastName, userName, userAge, gender, userRole, userAdd, hashedPassword, userProfile, req.params.id);
         } else {
-            userPass = users.userPass;
-            await updateUserDb(firstName, lastName, userName, userAge, gender, userRole, userAdd, userPass, userProfile, req.params.id);
-            res.status(200).send('User was updated successfully');
+            console.log('Using existing password:', users.userPass);
+            await updateUserDb(firstName, lastName, userName, userAge, gender, userRole, userAdd, users.userPass, userProfile, req.params.id);
         }
+
+        res.status(200).send('User was updated successfully');
     } catch (error) {
+        console.error('An error occurred while updating the user:', error);
         res.status(500).send('An error occurred while updating the user');
     }
-};   
+};
+
 
 
 const loginUser = async (req, res) => {
