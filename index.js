@@ -8,7 +8,7 @@ const app = express()
 app.use(express.static('public'))
 app.use(express.json())
 app.use(cors({
-    origin: 'http://localhost:8080',
+    origin: ['https://capstone-project-34e36.web.app','http://localhost:8080'],
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials:true
 }))
