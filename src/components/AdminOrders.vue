@@ -124,7 +124,7 @@
 .container {
   max-width: 90%;
   margin: auto;
-  background-color: #fff7f0; /* Soft background color for restaurant ambiance */
+  background-color: #fff7f0; 
   padding: 20px;
   border-radius: 10px;
 }

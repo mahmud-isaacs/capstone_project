@@ -70,32 +70,32 @@ export default {
 
 <style scoped>
 .restaurant-theme {
-  background-color: #F5F5F5; /* Light background to match restaurant theme */
+  background-color: #F5F5F5; 
   font-family: 'Georgia', serif;
 }
 
 .card {
-  background-color: #ffffff; /* White background for a clean look */
-  border: 1px solid #6A7B4C; /* Greenish border to match restaurant theme */
+  background-color: #ffffff; 
+  border: 1px solid #6A7B4C; 
 }
 
 .card-title {
-  color: #6A7B4C; /* Heading color */
+  color: #6A7B4C; 
   font-family: 'Archivo Black', sans-serif;
   font-size: 2rem;
 }
 
 .form-label {
-  color: #4A4A4A; /* Dark text color for readability */
+  color: #4A4A4A; 
 }
 
 input {
-  border: 2px solid #6A7B4C; /* Greenish border for input fields */
+  border: 2px solid #6A7B4C; 
   padding: 0.75rem;
 }
 
 .btn-custom {
-  background-color: #6A7B4C; /* Greenish button */
+  background-color: #6A7B4C;
   color: white;
   font-weight: bold;
   border-radius: 50px;
@@ -103,27 +103,27 @@ input {
 }
 
 .btn-custom:hover {
-  background-color: #829b61; /* Slightly lighter hover state */
+  background-color: #829b61; 
   color: white;
 }
 
 .btn-link {
-  color: #6A7B4C; /* Matching link color */
+  color: #6A7B4C; 
   font-weight: bold;
 }
 
 .btn-link:hover {
-  color: #829b61; /* Hover state for the link */
+  color: #829b61; 
   text-decoration: underline;
 }
 
 .btn-danger {
-  background-color: #c0392b; /* Red for the logout button */
+  background-color: #c0392b; 
   font-weight: bold;
 }
 
 .btn-danger:hover {
-  background-color: #e74c3c; /* Slightly lighter red on hover */
+  background-color: #e74c3c; 
 }
 </style>
 

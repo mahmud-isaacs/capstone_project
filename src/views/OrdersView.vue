@@ -82,13 +82,13 @@ export default {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  background-color: #f9f9f9; /* Light background for contrast */
-  border-radius: 10px; /* Rounded corners for container */
+  background-color: #f9f9f9; 
+  border-radius: 10px; 
 }
 
 h2 {
   font-family: "Archivo Black", sans-serif;
-  color: #6A7B4C; /* Restaurant theme color */
+  color: #6A7B4C; 
   margin-bottom: 20px;
 }
 
@@ -105,17 +105,17 @@ h2 {
 }
 
 .table th {
-  background-color: #6A7B4C; /* Restaurant theme color */
+  background-color: #6A7B4C; 
   color: white;
 }
 
 .table td {
-  background-color: #ffffff; /* Light background for table cells */
+  background-color: #ffffff; 
 }
 
 button {
   padding: 0.5rem 1rem;
-  background-color: #F1C40F; /* Accent color for button */
+  background-color: #F1C40F; 
   color: white;
   border: none;
   border-radius: 5px;
@@ -124,7 +124,7 @@ button {
 }
 
 button:hover {
-  background-color: #bc990d; /* Darker shade on hover */
+  background-color: #bc990d;
 }
 </style>
 

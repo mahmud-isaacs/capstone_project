@@ -72,17 +72,17 @@ export default {
 
 <style scoped>
 .restaurant-theme {
-  background-color: #F5F5F5; /* Light background for consistency */
+  background-color: #F5F5F5; 
   font-family: 'Georgia', serif;
 }
 
 .form-control {
-  border: 1px solid #6A7B4C; /* Green border to match the theme */
+  border: 1px solid #6A7B4C; 
   border-radius: 0.25rem;
 }
 
 .btn-custom {
-  background-color: #6A7B4C; /* Green button color to fit the theme */
+  background-color: #6A7B4C; 
   color: white;
   font-weight: bold;
   border-radius: 50px;
@@ -92,6 +92,6 @@ export default {
 }
 
 .btn-custom:hover {
-  background-color: #829b61; /* Slightly lighter green for hover */
+  background-color: #829b61; 
 }
 </style>
