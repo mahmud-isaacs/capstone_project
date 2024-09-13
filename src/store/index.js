@@ -93,6 +93,9 @@ export default createStore({
     clearUser(state) {
       state.user = null;
     },
+    logout(state) {
+      state.user = null; 
+    }
   },
   actions: {
     async fetchUsers({ commit }) {
@@ -118,8 +121,6 @@ export default createStore({
       try {
         const { data } = await axios.get(`${apiURL}users/${id}`);
         if (data) {
-          console.log(data);
-          
           commit('setUser', data.result || data);
         } else {
           toast.error('Failed to fetch user', {
@@ -175,9 +176,14 @@ export default createStore({
     
     async updateUser({ dispatch }, user) {
       try {
-        const { data } = await axios.patch(`${apiURL}users/update/${user.id}`, user);
+        const dataToSend = { ...user };
+        if (!user.userPass) {
+          delete dataToSend.userPass;
+        }
+    
+        const { data } = await axios.patch(`${apiURL}users/update/${user.id}`, dataToSend);
         if (data.msg) {
-          dispatch("fetchUsers");
+          await dispatch("fetchUser", user.id);
           toast.success('User updated successfully!', {
             autoClose: 2000,
             position: toast.POSITION.BOTTOM_CENTER,
@@ -239,14 +245,15 @@ export default createStore({
       try {
         cookies.remove('authToken');
         cookies.remove('user');
-        
-        delete axios.defaults.headers.Authorization; 
+        delete axios.defaults.headers.Authorization;
         commit('clearUser');
-        router.push({ name: 'login' });
+        localStorage.removeItem('user');
         toast.success('Logout successful!', {
           autoClose: 2000,
           position: toast.POSITION.BOTTOM_CENTER,
         });
+        router.push({ name: 'login' });
+        
       } catch (e) {
         toast.error('Logout failed', {
           autoClose: 2000,
@@ -327,9 +334,9 @@ export default createStore({
     async updateItem({ dispatch }, payload) {
       try {
         const { data } = await axios.patch(`${apiURL}items/update/${payload.itemID}`, payload);
-        if (data.msg) {
+        if (data && data.success) { 
           dispatch("fetchItems");
-          toast.success('item updated successfully!', {
+          toast.success('Item updated successfully!', {
             autoClose: 2000,
             position: toast.POSITION.BOTTOM_CENTER,
           });
@@ -346,7 +353,6 @@ export default createStore({
         });
       }
     },
-
     async addItem({ dispatch }, payload) {
       try {
         const { data } = await axios.post(`${apiURL}items/addItem`, payload);
@@ -436,8 +442,6 @@ export default createStore({
         const response = await axios.get(`${apiURL}orders/user/${userID}`);
         console.log(response.data.data);
         
-        // console.log('test order '+JSON.stringify(response.data));
-        
         if (response.data) {
           commit('setUserOrders', response.data.data);
         } else {
@@ -458,7 +462,8 @@ export default createStore({
       console.log('Payload to be sent:', payload);
       try {
         const { data } = await axios.post(`${apiURL}orders/addOrder`, payload);
-        if (data.success) {
+        console.log('Server response:', data);
+        if (data.success || data.order) {
           commit('addOrder', data.order);
           toast.success('Order added successfully!', {
             autoClose: 2000,

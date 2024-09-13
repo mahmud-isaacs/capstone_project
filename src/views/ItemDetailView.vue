@@ -8,7 +8,7 @@
         <div class="col-md-6">
           <h5 class="card-title text-center">{{ item.itemName }}</h5>
           <p class="text-center">{{ item.itemDescription }}</p>
-          <p class="lead text-center"><span class="text-success">Price</span>: R{{ item.itemPrice }}</p>
+          <p class="lead text-center"><span class="text-success">Price:</span> R{{ item.itemPrice }}</p>
           <div class="text-center">
             <router-link to="/booking">
               <button class="btn btn-custom">Book</button>
@@ -48,30 +48,48 @@ export default {
 
 <style scoped>
 .restaurant-theme {
-  background-color: #F5F5F5; 
+  background-color: #FAF3E0;
   font-family: 'Georgia', serif;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .prodImg {
   width: 100%;
   max-width: 20rem;
-  border: 2px solid #6A7B4C; 
+  border: 3px solid #8C5E3C;
   border-radius: 10px;
-  -webkit-filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2));
-  filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2));
+  -webkit-filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.2));
 }
 
 .btn-custom {
-  background-color: #6A7B4C; 
+  background-color: #8C5E3C;
   color: white;
   font-weight: bold;
   border-radius: 50px;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   border: none;
+  padding: 0.75rem 2rem;
   transition: background-color 0.3s ease-in-out;
 }
 
 .btn-custom:hover {
-  background-color: #829b61; 
+  background-color: #6A3B1A;
+}
+
+h5.card-title {
+  font-size: 1.5rem;
+  color: #6A3B1A;
+}
+
+p.text-center {
+  color: #333;
+}
+
+p.lead {
+  font-size: 1.2rem;
+  color: #6A7B4C;
 }
 </style>

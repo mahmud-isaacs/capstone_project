@@ -25,40 +25,38 @@
         </div>
       </div>
 
+
       <h1 class="text-center mt-5">Our Menu</h1>
       <div v-if="items.length > 0">
-        <div data-aos="fade-left" class="accordion accordion-flush" id="accordionExample">
-          <div class="accordion-item bg-transparent with-blur-backdrop border-2 accMarg">
-            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <div class="card-group card-group-scroll m-auto">
-                  <div
-                    v-for="item in items"
-                    id="cardBlockWidth"
-                    class="card bg-transparent with-blur-backdrop border border-0"
-                    :key="item.itemID"
-                  >
-                    <div class="container-fluid">
-                      <router-link to="/items">
-                        <img
-                          id="imgSize"
-                          :src="item.itemUrl"
-                          class="img-fluid hover-zoom"
-                          alt="image"
-                        />
-                      </router-link>
-                    </div>
-                    <div class="card-body">
-                      <h5 class="card-title">{{ item.itemName }}</h5>
-                      <p class="lead">
-                        <span class="text-success">Price</span>: R{{ item.itemPrice }}
-                      </p>
-                    </div>
+        <div id="menuCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div v-for="(item, index) in items" :key="item.itemID" :class="['carousel-item', { active: index === 0 }]">
+              <div class="d-flex justify-content-center">
+                <div class="card bg-transparent with-blur-backdrop border-0" style="width: 18rem;">
+                  <router-link to="/items">
+                  <img
+                    :src="item.itemUrl"
+                    class="card-img-top img-fluid hover-zoom"
+                    :alt="item.itemName"
+                  />
+                  </router-link>
+                  <div class="card-body">
+                    <h5 class="card-title">{{ item.itemName }}</h5>
+                    <p class="lead"><span class="text-success">Price</span>: R{{ item.itemPrice }}</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <!-- Carousel controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
       </div>
       <div v-else>
@@ -87,53 +85,62 @@ export default {
 
 <style scoped>
 main {
-  background-color: #F5F5DC; /* Soft cream background for a cozy feel */
+  background-color: #F5F5DC; 
 }
 
 .container {
-  background-color: #FAF3E0; /* Light cream background for the container */
+  background-color: #FAF3E0; 
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Soft shadow for a gentle 3D effect */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
 }
 
 .animated-heading {
-  color: #8b4513; /* Chocolate color for warmth */
-  font-family: 'Dancing Script', cursive; /* Friendly, cursive font */
-  animation: bounce 2s infinite;
+  color: #8b4513; 
+  font-family: 'Playfair Display', serif; 
+  font-size: 3rem;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+  animation: fadeIn 2s ease-in-out, float 4s ease-in-out infinite; 
 }
 
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
     transform: translateY(0);
   }
-  40% {
-    transform: translateY(-30px);
-  }
-  60% {
-    transform: translateY(-15px);
+  50% {
+    transform: translateY(-10px);
   }
 }
 
 .animated-subheading {
-  color: #deb887; /* Light brown color for contrast */
-  font-size: 1.5rem;
-  font-family: 'Dancing Script', cursive;
-  transition: color 0.3s ease-in-out;
+  color: #deb887;
+  font-size: 1.8rem;
+  font-family: 'Dancing Script', cursive; 
   text-align: center;
   margin-bottom: 30px;
+  animation: fadeIn 2s ease-in-out 0.5s both, float 6s ease-in-out infinite; 
+  transition: color 0.3s ease-in-out;
 }
 
 .animated-subheading:hover {
-  color: #6A7B4C;
+  color: #6A7B4C; 
 }
 
 .prodImg {
   width: 100%;
   max-width: 20rem;
-  border: 3px solid #6A7B4C; /* Border matching the theme */
+  border: 3px solid #6A7B4C; 
   border-radius: 8px;
   margin-bottom: 20px;
 }
@@ -146,10 +153,46 @@ main {
   transform: scale(1.05);
 }
 
+.carousel-item img {
+  border: 3px solid #6A7B4C;
+  border-radius: 8px; 
+  width: 100%;
+  height: auto;
+}
+
+.carousel-item {
+  transition: transform 0.5s ease-in-out;
+}
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(38%) sepia(35%) saturate(268%) hue-rotate(62deg) brightness(92%) contrast(81%);
+}
+
+
+.carousel-control-prev,
+.carousel-control-next {
+  background-color: rgba(106, 123, 76, 0.5); 
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+  filter: invert(48%) sepia(55%) saturate(321%) hue-rotate(65deg) brightness(85%) contrast(93%);
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  background-color: rgba(130, 155, 97, 0.7); 
+}
+
 .btn-about, .btn-menu {
-  background-color: #6A7B4C; /* Matching button color */
+  background-color: #6A7B4C; 
   color: white;
-  border: 2px solid #6A7B4C; /* Border color matching button */
+  border: 2px solid #6A7B4C; 
   border-radius: 5px;
   padding: 10px 20px;
   font-size: 1.1rem;
@@ -157,7 +200,7 @@ main {
 }
 
 .btn-about:hover, .btn-menu:hover {
-  background-color: #829b61; /* Lighter green on hover */
+  background-color: #829b61; 
   border-color: #829b61;
   color: black;
 }
@@ -176,7 +219,7 @@ main {
     padding: 8px;
   }
   .animated-heading {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
   .animated-subheading {
     font-size: 1.2rem;
@@ -194,35 +237,12 @@ main {
   }
 }
 
-@media screen and (max-width: 767px) {
-  .container {
-    padding: 10px;
-  }
-  .animated-heading {
-    font-size: 1.8rem;
-  }
-  .animated-subheading {
-    font-size: 1.4rem;
-  }
-  .prodImg {
-    width: 100%;
-    max-width: 100%;
-  }
-  button {
-    font-size: 0.9rem;
-    padding: 10px 18px;
-  }
-  .lead {
-    font-size: 1.1rem;
-  }
-}
-
 @media screen and (min-width: 768px) and (max-width: 991px) {
   .container {
     padding: 15px;
   }
   .animated-heading {
-    font-size: 2rem;
+    font-size: 2.4rem;
   }
   .animated-subheading {
     font-size: 1.6rem;
@@ -235,66 +255,6 @@ main {
     font-size: 1rem;
     padding: 12px 20px;
   }
-  .lead {
-    font-size: 1.2rem;
-  }
-}
-
-@media screen and (min-width: 990px) and (max-width: 1300px) {
-  .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .col-md-6 {
-    max-width: 100%;
-    margin: 0 auto;
-  }
-  .animated-heading {
-    font-size: 2.2rem;
-  }
-  .animated-subheading {
-    font-size: 1.7rem;
-  }
-  .prodImg {
-    max-width: 100%;
-  }
-  button {
-    font-size: 1rem;
-    padding: 12px 20px;
-  }
-  .card-body {
-    padding: 15px;
-  }
-  .lead {
-    font-size: 1.2rem;
-  }
-}
-
-@media screen and (min-width: 1024px) and (max-width: 1300px) {
-  .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .animated-heading {
-    font-size: 2.5rem;
-  }
-  .animated-subheading {
-    font-size: 1.8rem;
-  }
-  .prodImg {
-    max-width: 100%;
-  }
-  button {
-    font-size: 1.1rem;
-    padding: 14px 24px;
-  }
-  .card-body {
-    padding: 20px;
-  }
-  .lead {
-    font-size: 1.3rem;
-  }
 }
 </style>
+

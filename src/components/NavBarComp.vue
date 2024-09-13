@@ -10,29 +10,29 @@
         </a>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" to="/" active-class="active-link">Home</router-link>
+            <router-link class="nav-link" to="/" exact-active-class="active-link">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/about" active-class="active-link">About Us</router-link>
+            <router-link class="nav-link" to="/about" exact-active-class="active-link">About Us</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/items" active-class="active-link">Menu</router-link>
+            <router-link class="nav-link" to="/items" exact-active-class="active-link">Menu</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/booking" active-class="active-link">Book Now</router-link>
+            <router-link class="nav-link" to="/booking" exact-active-class="active-link">Book Now</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/orders" active-class="active-link">Orders</router-link>
+            <router-link class="nav-link" to="/orders" exact-active-class="active-link">Orders</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/admin" active-class="active-link">Admin</router-link>
+            <router-link class="nav-link" to="/admin" exact-active-class="active-link">Admin</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/contact" active-class="active-link">Contact Us</router-link>
+            <router-link class="nav-link" to="/contact" exact-active-class="active-link">Contact Us</router-link>
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item" v-if="mase">
+          <li class="nav-item" v-if="user">
             <router-link :to="{ name: 'userDetail', params: { id: user.id } }">
               <img :src="user.userProfile" alt="Profile" class="profile-icon">
             </router-link>
@@ -48,26 +48,26 @@
   </nav>
 </template>
 
-
-
-
-
-
 <script>
-/*eslint-disable*/
-import { useCookies } from 'vue3-cookies';
-let {cookies} = useCookies()
+// import { useCookies } from 'vue3-cookies';
+
 export default {
+  data() {
+    return {
+      user: null
+    };
+  },
   computed: {
     isLoggedIn() {
-      return this.$store.state.userID !== null;
-    },
-    user() {
-      this.$store.commit('setUser',cookies.get('user'))
-      return this.$store.state.user; 
-    },
-    mase(){
-      return typeof cookies.get('authToken') === 'string'
+      return typeof this.$store.state.token === 'string';
+    }
+  },
+  watch: {
+    '$store.state.user': {
+      immediate: true,
+      handler(newUser) {
+        this.user = newUser || this.$cookies.get('user') || null;
+      }
     }
   },
   methods: {
@@ -80,18 +80,22 @@ export default {
     }
   },
   async mounted() {
-    await this.verify();
+    const storedUser = this.$cookies.get('user');
+    if (storedUser) {
+      this.user = storedUser;
+    } else {
+      await this.verify();
+    }
   }
 };
 </script>
-
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 
 .custom-bg-green {
-  background-color: #8E8C6C; /* A more refined shade for a restaurant feel */
-  border-bottom: 3px solid #6A7B4C; /* Add a bottom border for a subtle separation */
+  background-color: #8E8C6C;
+  border-bottom: 3px solid #6A7B4C; 
 }
 
 .navbar-toggler {
@@ -104,32 +108,32 @@ export default {
 }
 
 .nav-link {
-  color: #F5F5F5; /* Light color for better contrast */
+  color: #F5F5F5; 
   font-family: "Archivo Black", sans-serif;
-  font-size: 0.8rem; /* Slightly larger for readability */
-  padding: 10px 15px; /* Increase padding for touch targets */
+  font-size: 0.8rem; 
+  padding: 10px 15px; 
   transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #F1C40F; /* Highlight color for hover */
-  background-color: #6A7B4C; /* Subtle background change on hover */
-  border-radius: 5px; /* Rounded corners for a softer look */
+  color: #F1C40F; 
+  background-color: #6A7B4C; 
+  border-radius: 5px; 
 }
 
 .active-link {
-  color: #F1C40F; /* Highlight color for active links */
+  color: #F1C40F !important; 
 }
 
 .imageLogo {
-  width: 50px; /* Slightly larger logo */
+  width: 50px; 
 }
 
 .profile-icon {
   width: 40px;
   height: 40px;
   border-radius: 50%;  
-  border: 2px solid #F1C40F; /* Border around profile icon */
+  border: 2px solid #F1C40F; 
 }
 
 .navbar-nav {
@@ -151,11 +155,11 @@ export default {
     margin-left: 0;
   }
   .imageLogo {
-    width: 40px; /* Adjust size for tablets */
+    width: 40px; 
   }
   .profile-icon {
-    width: 35px; /* Adjust size for tablets */
-    height: 35px; /* Adjust size for tablets */
+    width: 35px; 
+    height: 35px;
   }
 }
 
@@ -175,10 +179,11 @@ export default {
     margin-bottom: 1rem;
   }
   .navbar-nav .nav-link {
-    font-size: 1rem; /* Adjust font size for mobile */
-    padding: 10px; /* Increase padding for touch targets */
+    font-size: 1rem; 
+    padding: 10px; 
   }
 }
 </style>
+
 
 

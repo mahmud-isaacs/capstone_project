@@ -2,23 +2,23 @@
   <div class="container">
     <h2>Select a Date and Time Slot</h2>
 
-    <input type="date" v-model="selectedDate" @change="openDropdown" />
+    <input type="date" v-model="selectedDate" @change="openDropdown" class="date-input" />
 
     <div v-if="showDropdown" class="dropdown">
       <label for="items">Select an item:</label>
-      <select v-model="selectedItem" id="items">
+      <select v-model="selectedItem" id="items" class="form-select">
         <option disabled value="">Select an item</option>
         <option v-for="item in items" :key="item.itemID" :value="item">{{ item.itemName }}</option>
       </select>
 
       <label for="timeSlots">Select a time slot:</label>
-      <select v-model="selectedTimeSlot" id="timeSlots">
+      <select v-model="selectedTimeSlot" id="timeSlots" class="form-select">
         <option disabled value="">Select a time slot</option>
         <option v-for="timeSlot in timeSlots" :key="timeSlot">{{ timeSlot }}</option>
       </select>
 
       <label for="quantity">Quantity:</label>
-      <input type="number" v-model.number="quantity" id="quantity" min="1" />
+      <input type="number" v-model.number="quantity" id="quantity" min="1" class="quantity-input" />
 
       <div class="order-summary">
         <p><strong>Selected Item:</strong> {{ selectedItem?.itemName || 'None' }}</p>
@@ -28,7 +28,7 @@
         <p><strong>Total Price:</strong> {{ totalPrice.toFixed(2) }}</p>
       </div>
 
-      <button @click="addItem">Confirm</button>
+      <button @click="addItem" class="confirm-button">Confirm</button>
 
       <div v-if="selectedItems.length > 0" class="order-list">
         <h3>Your Order:</h3>
@@ -144,85 +144,99 @@ export default {
 .container {
   max-width: 600px;
   margin: 0 auto;
-  padding: 2rem; /* Increased padding for better spacing */
+  padding: 2rem; 
   text-align: center;
-  background-color: #fafafa; /* Light background color */
-  border-radius: 12px; /* Rounded corners for a softer look */
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Slightly larger shadow for depth */
+  background-color: #f5f5f5; 
+  border-radius: 12px; 
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); 
 }
 
 h2 {
-  font-size: 2rem; /* Larger font size for heading */
-  color: #c23c3c; /* Warm red color */
-  margin-bottom: 1.5rem; /* Spacing below heading */
+  font-size: 2rem; 
+  color: #8B4513; 
+  margin-bottom: 1.5rem; 
+  font-family: 'Playfair Display', serif; 
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2); 
+}
+
+.date-input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
 }
 
 .dropdown {
   margin-top: 1rem;
   padding: 1.5rem;
-  background-color: #fff; /* White background for dropdown */
-  border: 1px solid #ddd; /* Light border for dropdown */
-  border-radius: 8px; /* Rounded corners for dropdown */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow for dropdown */
+  background-color: #fff; 
+  border: 1px solid #ddd; 
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
-select, input[type="number"] {
-  margin: 0.5rem 0; /* Margin on top and bottom for spacing */
+.form-select, .quantity-input {
+  margin: 0.5rem 0; 
   padding: 0.75rem;
   width: 100%;
   border-radius: 4px;
-  border: 1px solid #ddd; /* Light border color */
+  border: 1px solid #ddd;
 }
 
-button {
+.confirm-button {
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;
-  background-color: #c23c3c; /* Warm red color for buttons */
+  background-color: #8B4513; 
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s; /* Smooth transition for hover effect */
+  transition: background-color 0.3s; 
 }
 
-button:hover {
-  background-color: #a22c2c; /* Darker red shade on hover */
+.confirm-button:hover {
+  background-color: #6A3B1A; 
 }
 
 .order-summary, .order-list {
   margin-top: 1rem;
   padding: 1rem;
-  background-color: #fff; /* White background for order summary */
-  border: 1px solid #ddd; /* Light border for summary */
-  border-radius: 6px; /* Rounded corners for summary */
+  background-color: #fff; 
+  border: 1px solid #ddd; 
+  border-radius: 6px; 
 }
 
 .order-summary p, .order-list li {
-  font-size: 1rem; /* Consistent font size */
-  color: #333; /* Darker text color for better readability */
+  font-size: 1rem; 
+  color: #333; 
 }
 
 .order-list ul {
-  list-style-type: none; /* Remove default list styling */
-  padding: 0; /* Remove default padding */
+  list-style-type: none;
+  padding: 0;
 }
 
 .view-orders {
-  background-color: #6A7B4C; /* Secondary button color */
+  background-color: #6A7B4C; 
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s; 
 }
 
 .view-orders:hover {
-  background-color: #405121; /* Darker shade on hover */
+  background-color: #405121;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem; 
+  }
+  h2 {
+    font-size: 1.5rem; 
+  }
 }
 </style>
-
-
-
-
-
-
-
-
-  
-  
-  
